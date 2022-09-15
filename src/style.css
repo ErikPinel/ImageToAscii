@@ -1,0 +1,50 @@
+/* .line{
+    border-left: 4px solid black;
+    height: 80vh;
+    position: absolute;
+    margin-left: -3px;
+    top: 0;
+    margin-top: 10vh;
+    left: 50vw;
+} */
+.img-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.container{
+    min-width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: row;
+}
+.image{
+    float: left;
+    margin:5vw;
+    margin-top: 10vh;
+    width: 1300px;
+    height: 1000px;
+}
+#canvas1{
+    float: right;
+    border: 2px solid black;
+    margin-top: 15vh;
+    margin:5vw;
+    width: 1300px;
+    height: 1000px;
+    
+
+}
+.img-input{
+    width: 10vw;
+    height: 5vh;
+    font-size: 2vw;
+}
+
+.true{
+    display: block;
+}
+.false{
+display:  none;
+}
