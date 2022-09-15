@@ -5,55 +5,49 @@ import "./style.css"
 
 
 
-
-var highQuality;
-
-function e(img){
+function imageInitial(img){ //אנחנו רוצים לעטוף הכל בפונקציה בעיקר בגלל שליטה בתזמון הגדרת המשתנים
 
   const canvas= document.getElementById('canvas1');
-  const ctx = canvas.getContext('2d')
-  const image1 = new Image();
-  image1.src=img;
-  class Cell{
+  const contaxt = canvas.getContext('2d')
+  const userImage = new Image();
+  userImage.src=img;
+  class CellSize{
       constructor(x,y,symbol,color){
       this.x=x;
       this.y=y;
       this.symbol=symbol;
       this.color=color;
-  
       }
-      draw(ctx)
-      {
-        const myTimeout = setTimeout(()=>{ctx.fillStyle= this.color; //color
-        ctx.fillText(this.symbol,this.x,this.y);},1);
+      draw(contaxt)
+      { 
+        const myTimeout = setTimeout(()=>{contaxt.fillStyle= this.color; // דוחף פיקסל לקנבס כל אלפית שנייה
+        contaxt.fillText(this.symbol,this.x,this.y);},1);
       
       }
   }
   
-  class AsciEffect {
+  class ToAssci {
   #imageCelAray = [];
   #pixels = [];
-  #ctx;
+  #contaxt;
   #width;
   #height;
   
-  constructor(ctx, width, height)
+  constructor(contaxt, width, height)
   {
-  this.#ctx= ctx;
+  this.#contaxt= contaxt;
   this.#width=width;
   this.#height=height;
-  this.#ctx.drawImage(image1,0,0,this.#width,this.#height);
-  this.#pixels=this.#ctx.getImageData(0,0,this.#width,this.#height);
+  this.#contaxt.drawImage(userImage,0,0,this.#width,this.#height);
+  this.#pixels=this.#contaxt.getImageData(0,0,this.#width,this.#height);
   console.log(this.#pixels.data);
-  
-  
   }
   
-  #convertToSymbol(avgColor){
+  #convertToSymbol(avgColor){// cellמחזיר תו לפי ממוצע ה
     
       if(avgColor>250)
       {
-  return '@'
+  return '+'
       }
       else if(avgColor>230) return '/';
       else if(avgColor>220) return '!';
@@ -65,7 +59,7 @@ function e(img){
       else if(avgColor>160) return '(';
       else if(avgColor>150) return ')';
       else if(avgColor>140) return '_';
-      else if(avgColor>130) return '+';
+      else if(avgColor>130) return '@';
       else if(avgColor>120) return 'q';
       else if(avgColor>110) return 'w';
       else if(avgColor>100) return 'e';
@@ -89,7 +83,7 @@ function e(img){
               const posY= y*4;
               const pos=(posY* this.#pixels.width)+posX;
   
-              if(this.#pixels.data[pos+3]>128){
+              if(this.#pixels.data[pos+3]>1){
                   const red=this.#pixels.data[pos];
                   const green=this.#pixels.data[pos+1];
                   const blue= this.#pixels.data[pos+2];
@@ -97,7 +91,7 @@ function e(img){
                   const avaregeColorValue =total/3;
                   const color= "rgb(" +  red+ ","+green+","+blue+")";
                   const symbol= this.#convertToSymbol(avaregeColorValue);
-                  if(total>250)this.#imageCelAray.push(new Cell(x,y,symbol,color));
+                  if(total>1)this.#imageCelAray.push(new CellSize(x,y,symbol,color));
                  
   
   
@@ -110,14 +104,14 @@ function e(img){
   }
   
   #drawAscii(){
-      this.#ctx.clearRect(0,0,this.#width,this.#height);
+      this.#contaxt.clearRect(0,0,this.#width,this.#height);//מאתחל את הקנבאס
       for(let i=0;i<this.#imageCelAray.length;i++)
       {
-           this.#imageCelAray[i].draw(this.#ctx)
+           this.#imageCelAray[i].draw(this.#contaxt)
       }
   }
   
-  draw(cellSize){
+  draw(cellSize){//  מפעיל את תהליך הסריקה ודחיפת הפיקסלים
       this.#scanImage(cellSize);
       this.#drawAscii();
       
@@ -129,14 +123,11 @@ function e(img){
   
   
   let effect;
-  
-  image1.onload= function initialize(){
-      canvas.width= image1.width;
-      canvas.height=image1.height
-      effect=new AsciEffect(ctx,image1.width,image1.height);
+  userImage.onload= function initialize(){// אנחנו רוצים לבצע פעולות על התמונה רק לאחר שהיא טענה
+      canvas.width= userImage.width;
+      canvas.height=userImage.height
+      effect=new ToAssci(contaxt,userImage.width,userImage.height);
       effect.draw(4);
-       highQuality = canvas.toDataURL("image/jpeg", 1.0);
-    
   }
   }
   
@@ -185,11 +176,9 @@ return (
   <div className='line'></div>
   <div className='img-container'>
     <canvas id="canvas1"></canvas>
-    <button  onClick={()=>e(image)}> show assci</button>
+    <button  onClick={()=>imageInitial(image)}> show assci</button>
     </div>
     
-    {/* <a href={highQuality} download="highQuality" > aksdkasdkkasdkasdkkasdksd</a>
-    */}
 
 
   </div>
